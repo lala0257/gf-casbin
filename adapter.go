@@ -2,6 +2,7 @@ package gf_casbin
 
 import (
 	"context"
+	"fmt"
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	"github.com/casbin/casbin/v2/persist"
@@ -104,11 +105,13 @@ func (a *GfCasbin) SavePolicy(model model.Model) (err error) {
 }
 
 func (a *GfCasbin) dropTable() (err error) {
-	return
+	_, err = a.db.Exec(a.ctx, fmt.Sprintf("DROP TABLE %s", DefaultTableName))
+	return err
 }
 
 func (a *GfCasbin) createTable() (err error) {
-	return
+	_, err = a.db.Exec(a.ctx, fmt.Sprintf("CREATE TABLE IF NOT EXISTS %s (ptype VARCHAR(10), v0 VARCHAR(256), v1 VARCHAR(256), v2 VARCHAR(256), v3 VARCHAR(256), v4 VARCHAR(256), v5 VARCHAR(256))", DefaultTableName))
+	return err
 }
 
 // AddPolicy adds a policy rule to the storage.
